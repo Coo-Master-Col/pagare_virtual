@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pagaré Virtual · Colombia</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#f6f1e7;
+  --ink:#1a120a;
+  --brown:#5c3a1a;
+  --gold:#b8860b;
+  --gold-light:#d4a843;
+  --red:#8b1a1a;
+  --border:#c9a96e;
+  /*--bg:#231a0f;*/
+  --bg:#333;
+}
+html{font-size:16px;}
+body{
+  background:var(--bg);
+  min-height:100vh;
+  font-family:'Crimson Pro',Georgia,serif;
+  padding:0 0 80px;
+}
+
+/* ── HEADER ── */
+.app-header{
+  background:var(--bg);
+  padding:18px 16px 14px;
+  text-align:center;
+  border-bottom:1px solid rgba(184,134,11,0.2);
+  position:sticky;top:0;z-index:100;
+}
+.app-header h1{
+  font-family:'IM Fell English',serif;
+  font-size:1.5rem;
+  color:var(--gold-light);
+  letter-spacing:0.1em;
+}
+.app-header p{
+  font-size:0.62rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--gold);
+  opacity:0.6;
+  margin-top:3px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{
+  background:rgba(184,134,11,0.12);
+  height:3px;
+}
+.progress-bar{
+  height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-light));
+  transition:width 0.4s ease;
+  width:0%;
+}
+
+/* ── SECCIONES (wizard) ── */
+.sections{padding:0 16px;}
+
+.section{
+  display:none;
+  animation:fadeIn 0.3s ease;
+}
+.section.active{display:block;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.section-header{
+  padding:24px 0 10px;
+  border-bottom:1px solid rgba(184,134,11,0.25);
+  margin-bottom:20px;
+}
+.step-num{
+  font-size:0.58rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--gold);
+  opacity:0.65;
+}
+.section-header h2{
+  font-family:'IM Fell English',serif;
+  font-size:1.35rem;
+  color:var(--gold-light);
+  margin-top:4px;
+}
+
+/* ── CAMPOS ── */
+.field-group{margin-bottom:18px;}
+.field-group label{
+  display:block;
+  font-size:0.62rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--border);
+  margin-bottom:6px;
+}
+.field-group input,.field-group select{
+  width:100%;
+  background:rgba(246,241,231,0.06);
+  border:none;
+  border-bottom:1.5px solid rgba(201,169,110,0.4);
+  color:var(--cream);
+  font-family:'Crimson Pro',serif;
+  font-size:1.05rem;
+  padding:10px 4px 8px;
+  border-radius:0;
+  -webkit-appearance:none;
+  transition:border-color 0.2s,background 0.2s;
+}
+.field-group input:focus,.field-group select:focus{
+  outline:none;
+  border-bottom-color:var(--gold);
+  background:rgba(184,134,11,0.07);
+}
+.field-group input::placeholder{
+  color:rgba(201,169,110,0.35);
+  font-style:italic;
+}
+.field-group select option{background:#2c1f0e;color:var(--cream);}
+
+/*=======================================================*/
+/* Estilo Datos del Acreedor / Beneficiario*/
+/*DATOS QUE QUEDAN COMO CONSTANTES*/
+/*=======================================================*/
+
+#tipo_doc_ac{width:100%;
+  background:rgba(246,241,231,0.06);
+  border:none;
+  border-bottom:1.5px solid rgba(201,169,110,0.4);
+  color:var(--cream);
+  font-family:'Crimson Pro',serif;
+  font-size:1.05rem;
+  padding:10px 4px 8px;
+  border-radius:0;
+  -webkit-appearance:none;
+  transition:border-color 0.2s,background 0.2s;}
+
+  #serial{width:100%;
+  background:rgba(246,241,231,0.06);
+  border:none;
+  border-bottom:1.5px solid rgba(201,169,110,0.4);
+  color:var(--cream);
+  font-family:'Crimson Pro',serif;
+  font-size:1.05rem;
+  padding:10px 4px 8px;
+  border-radius:0;
+  -webkit-appearance:none;
+  transition:border-color 0.2s,background 0.2s;}
+/*=======================================================*/
+
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* Monto destacado */
+.monto-display{
+  background:rgba(139,26,26,0.12);
+  border:1px solid rgba(139,26,26,0.3);
+  border-radius:4px;
+  padding:14px 16px;
+  margin-bottom:18px;
+  text-align:center;
+}
+.monto-display span{
+  font-size:0.6rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--border);
+  display:block;
+  margin-bottom:4px;
+}
+.monto-display strong{
+  font-size:1.4rem;
+  color:#e8a0a0;
+  font-weight:600;
+}
+
+/* ── CANVAS FIRMA ── */
+.firma-area{
+  background:rgba(246,241,231,0.04);
+  border:1.5px dashed rgba(201,169,110,0.35);
+  border-radius:4px;
+  margin-bottom:8px;
+  position:relative;
+  overflow:hidden;
+}
+.firma-area canvas{
+  display:block;
+  width:100%;
+  height:120px;
+  cursor:crosshair;
+  touch-action:none;
+}
+.firma-hint{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:0.72rem;
+  letter-spacing:0.1em;
+  color:rgba(201,169,110,0.3);
+  pointer-events:none;
+  transition:opacity 0.3s;
+  text-align:center;
+  width:100%;
+}
+.firma-hint.hidden{opacity:0;}
+.btn-borrar-firma{
+  font-family:'Crimson Pro',serif;
+  font-size:0.7rem;
+  letter-spacing:0.1em;
+  background:transparent;
+  border:none;
+  color:var(--border);
+  opacity:0.5;
+  cursor:pointer;
+  text-decoration:underline;
+  padding:4px 0;
+}
+.btn-borrar-firma:active{opacity:1;}
+
+/* ── PREVIEW DEL DOCUMENTO ── */
+#preview-section{padding:16px;}
+.doc-preview{
+  background:var(--cream);
+  border:1px solid var(--border);
+  box-shadow:0 0 0 3px var(--bg),0 0 0 4px var(--gold),0 8px 32px rgba(0,0,0,0.6);
+  padding:28px 24px 24px;
+  position:relative;
+  color:var(--ink);
+  font-family:'Crimson Pro',Georgia,serif;
+  font-size:0.9rem;
+  line-height:1.75;
+}
+.doc-preview .corner-d{position:absolute;color:var(--gold);font-size:0.9rem;opacity:0.35;pointer-events:none;}
+.doc-preview .corner-d.tl{top:8px;left:10px;}
+.doc-preview .corner-d.tr{top:8px;right:10px;transform:scaleX(-1);}
+.doc-preview .corner-d.bl{bottom:8px;left:10px;transform:scaleY(-1);}
+.doc-preview .corner-d.br{bottom:8px;right:10px;transform:scale(-1);}
+
+.doc-top{
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  padding-bottom:14px;
+  margin-bottom:16px;
+}
+.doc-top .serial-row{
+  display:flex;justify-content:space-between;
+  font-size:0.68rem;color:var(--brown);opacity:0.7;
+  margin-bottom:8px;
+}
+.doc-top h2{
+  font-family:'IM Fell English',serif;
+  font-size:2rem;
+  color:var(--brown);
+  letter-spacing:0.1em;
+}
+.doc-top .subtit{
+  font-size:0.58rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-top:3px;
+}
+
+.doc-body{text-align:justify;hyphens:auto;color:var(--ink);}
+.doc-body p{margin-bottom:10px;}
+
+.val{
+  color:var(--red);
+  font-style:italic;
+  border-bottom:1px solid rgba(92,58,26,0.5);
+  display:inline;
+  padding:0 2px;
+}
+.val.empty{color:#b8a070;font-style:italic;}
+
+.doc-clausulas{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+  font-size:0.78rem;
+  line-height:1.6;
+  color:#3a2a12;
+}
+.doc-clausulas p{margin-bottom:6px;}
+.doc-clausulas em{
+  font-size:0.65rem;letter-spacing:0.1em;
+  text-transform:uppercase;font-style:normal;
+  color:var(--brown);font-weight:600;
+}
+
+.doc-firmas{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:24px;
+}
+.doc-firma-bloque{text-align:center;}
+.doc-firma-linea{
+  border-top:1px solid var(--ink);
+  margin-bottom:4px;
+  margin-top:50px;
+  position:relative;
+}
+.doc-firma-img{
+  position:absolute;
+  bottom:2px;left:0;right:0;
+  height:48px;
+  object-fit:contain;
+}
+.doc-firma-lbl{
+  font-size:0.6rem;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--brown);opacity:0.65;
+}
+.doc-firma-nombre{font-size:0.78rem;color:var(--ink);margin-top:3px;}
+
+.doc-pie{
+  margin-top:14px;
+  border-top:1px solid var(--border);
+  padding-top:8px;
+  display:flex;justify-content:space-between;
+  font-size:0.65rem;color:var(--brown);opacity:0.7;
+  flex-wrap:wrap;gap:4px;
+}
+
+/* ── NAV BUTTONS ── */
+.nav-btns{
+  display:flex;gap:10px;padding:16px;
+  position:sticky;bottom:0;
+  background:linear-gradient(to top,rgba(35,26,15,1) 70%,rgba(35,26,15,0));
+}
+.btn{
+  flex:1;
+  font-family:'Crimson Pro',serif;
+  font-size:0.9rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:13px 16px;
+  border:none;
+  cursor:pointer;
+  border-radius:3px;
+  transition:all 0.18s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-next{background:var(--gold);color:#1a0f00;font-weight:600;}
+.btn-next:active{background:var(--gold-light);}
+.btn-prev{background:transparent;border:1.5px solid rgba(201,169,110,0.35);color:var(--border);}
+.btn-prev:active{border-color:var(--gold);color:var(--gold);}
+.btn-pdf{background:var(--red);color:#f6f1e7;font-weight:600;flex:2;}
+.btn-pdf:active{background:#a02020;}
+
+/* ── STEP DOTS ── */
+.step-dots{
+  display:flex;justify-content:center;gap:8px;
+  padding:12px 0 4px;
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(201,169,110,0.2);
+  transition:all 0.3s;
+}
+.dot.active{background:var(--gold);width:18px;border-radius:3px;}
+.dot.done{background:rgba(184,134,11,0.5);}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:rgba(92,58,26,0.95);
+  color:var(--gold-light);
+  font-family:'Crimson Pro',serif;
+  font-size:0.88rem;
+  padding:10px 20px;
+  border-radius:20px;
+  border:1px solid rgba(184,134,11,0.3);
+  white-space:nowrap;
+  z-index:999;
+  opacity:0;
+  transition:opacity 0.3s;
+  pointer-events:none;
+}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <h1>PAGARÉ</h1>
+  <p>República de Colombia · Título Valor</p>
+</div>
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- STEP DOTS -->
+<div class="step-dots" id="stepDots"></div>
+
+<!-- ══ SECCIÓN 1: DEUDOR ══ -->
+<div class="sections">
+<div class="section active" id="sec-0">
+  <div class="section-header">
+    <div class="step-num">Paso 1 de 6</div>
+    <h2>Datos del Deudor</h2>
+  </div>
+  <div class="field-group">
+    <label>Nombre completo</label>
+    <input type="text" id="nombre_deudor" placeholder="Nombre y apellidos completos" autocomplete="name" />
+  </div>
+  <div class="row2">
+    <div class="field-group">
+      <label>Tipo de doc.</label>
+      <select id="tipo_doc">
+        <option value="C.C.">C.C.</option>
+        <option value="NIT">NIT</option>
+        <option value="C.E.">C.E.</option>
+        <option value="Pasaporte">Pasaporte</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>N.° de documento</label>
+      <input type="tel" id="num_doc" placeholder="12345678" />
+    </div>
+  </div>
+  <div class="field-group">
+    <label>Ciudad de residencia</label>
+    <input type="text" id="ciudad_deudor" placeholder="Bogotá, Medellín…" />
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 2: ACREEDOR ══ -->
+<div class="section" id="sec-1">
+  <div class="section-header">
+    <div class="step-num">Paso 2 de 6</div>
+    <h2>Acreedor / Beneficiario</h2>
+  </div>
+  <div class="field-group">
+    <label>Nombre completo del acreedor</label>
+    <input type="text" id="acreedor" value="CREDICOOP" readonly>
+    <!--<input type="text" id="acreedor" placeholder="Nombre y apellidos completos" />-->
+  </div>
+  <div class="row2">
+    <div class="field-group">
+      <label>Tipo de doc.</label>
+      <p id="tipo_doc_ac">NIT</p>
+      <!--<select id="tipo_doc_ac">
+        <option value="C.C.">C.C.</option>
+        <option value="NIT">NIT</option>
+        <option value="C.E.">C.E.</option>
+        <option value="Pasaporte">Pasaporte</option>
+      </select>-->
+    </div>
+    <div class="field-group">
+      <label>N.° de documento</label>
+      <input type="tel" id="num_doc_ac" value="901.456.782-5" readonly>
+      <!--<input type="tel" id="num_doc_ac" placeholder="12345678" />-->
+    </div>
+  </div>
+  <div class="field-group">
+    <label>N.° de Pagaré (opcional)</label>
+    <p id="serial">00001</p>
+    <!--<input type="text" id="serial" placeholder="00001" />-->
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 3: MONTO ══ -->
+<div class="section" id="sec-2">
+  <div class="section-header">
+    <div class="step-num">Paso 3 de 6</div>
+    <h2>Monto y Vencimiento</h2>
+  </div>
+  <div class="field-group">
+    <label>Valor en números ($)</label>
+    <input type="tel" id="monto_num" placeholder="2.000.000" oninput="syncMonto()" />
+  </div>
+  <div class="monto-display">
+    <span>Vista previa del monto</span>
+    <strong id="monto_preview">$0</strong>
+  </div>
+  <div class="field-group">
+    <label>Valor en letras</label>
+    <input type="text" id="monto_letras" placeholder="Dos millones de pesos m/cte" />
+  </div>
+  <div class="field-group">
+    <label>Tasa de interés de mora (% mensual)</label>
+    <input type="tel" id="tasa" placeholder="ej: 1.5" />
+  </div>
+  <div class="section-header" style="margin-top:8px;">
+    <div class="step-num">Fecha de vencimiento</div>
+  </div>
+  <div class="row3">
+    <div class="field-group">
+      <label>Día</label>
+      <input type="tel" id="dia_vcto" placeholder="DD" maxlength="2" />
+    </div>
+    <div class="field-group">
+      <label>Mes</label>
+      <input type="text" id="mes_vcto" placeholder="Mes" />
+    </div>
+    <div class="field-group">
+      <label>Año</label>
+      <input type="tel" id="anio_vcto" placeholder="AAAA" maxlength="4" />
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 4: LUGAR Y CLÁUSULAS ══ -->
+<div class="section" id="sec-3">
+  <div class="section-header">
+    <div class="step-num">Paso 4 de 6</div>
+    <h2>Ciudad y Cláusulas</h2>
+  </div>
+  <div class="row2">
+    <div class="field-group">
+      <label>Ciudad de pago</label>
+      <input type="text" id="ciudad_pago" placeholder="Bogotá" />
+    </div>
+    <div class="field-group">
+      <label>Ciudad contractual</label>
+      <input type="text" id="ciudad_contrato" placeholder="Bogotá" />
+    </div>
+  </div>
+  <div class="field-group">
+    <label>Departamento</label>
+    <input type="text" id="dpto" placeholder="Cundinamarca" />
+  </div>
+  <div class="section-header" style="margin-top:4px;">
+    <div class="step-num">Fecha de firma del documento</div>
+  </div>
+  <div class="row3">
+    <div class="field-group">
+      <label>Día</label>
+      <input type="tel" id="dia_firma" placeholder="DD" maxlength="2" />
+    </div>
+    <div class="field-group">
+      <label>Mes</label>
+      <input type="text" id="mes_firma" placeholder="Mes" />
+    </div>
+    <div class="field-group">
+      <label>Año</label>
+      <input type="tel" id="anio_firma" placeholder="AAAA" maxlength="4" />
+    </div>
+  </div>
+  <div class="field-group">
+    <label>Ciudad de firma</label>
+    <input type="text" id="ciudad_firma" placeholder="Ciudad donde se firma" />
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 5: CODEUDOR ══ -->
+<div class="section" id="sec-4">
+  <div class="section-header">
+    <div class="step-num">Paso 5 de 7</div>
+    <h2>Codeudor / Avalista</h2>
+  </div>
+  <p style="font-size:0.82rem;color:var(--border);opacity:0.8;margin-bottom:20px;line-height:1.6;">
+    El codeudor responde solidariamente por la deuda. Si no aplica, deja los campos en blanco.
+  </p>
+  <div class="field-group">
+    <label>Nombre completo del codeudor</label>
+    <input type="text" id="nombre_codeudor" placeholder="Nombre y apellidos (opcional)" />
+  </div>
+  <div class="row2">
+    <div class="field-group">
+      <label>Tipo de doc.</label>
+      <select id="tipo_doc_co">
+        <option value="C.C.">C.C.</option>
+        <option value="NIT">NIT</option>
+        <option value="C.E.">C.E.</option>
+        <option value="Pasaporte">Pasaporte</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>N.° de documento</label>
+      <input type="tel" id="num_doc_co" placeholder="12345678" />
+    </div>
+  </div>
+  <div class="field-group">
+    <label>Ciudad de residencia</label>
+    <input type="text" id="ciudad_codeudor" placeholder="Ciudad del codeudor" />
+  </div>
+  <div class="field-group" style="margin-top:8px;">
+    <label>Firma del Codeudor</label>
+    <div class="firma-area" id="area-codeudor">
+      <canvas id="canvas-codeudor"></canvas>
+      <span class="firma-hint" id="hint-codeudor">✦ Dibuja aquí la firma (opcional)</span>
+    </div>
+    <button class="btn-borrar-firma" onclick="borrarFirma('canvas-codeudor','hint-codeudor')">× Borrar y volver a firmar</button>
+  </div>
+  <div class="field-group">
+    <label>Nombre bajo la firma</label>
+    <input type="text" id="fn_codeudor" placeholder="Nombre completo" />
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 6: FIRMAS ══ -->
+<div class="section" id="sec-5">
+  <div class="section-header">
+    <div class="step-num">Paso 6 de 7</div>
+    <h2>Firmas Digitales</h2>
+  </div>
+  <p style="font-size:0.82rem;color:var(--border);opacity:0.8;margin-bottom:16px;line-height:1.6;">
+    Dibuja la firma con el dedo en el recuadro. Puedes borrarla y volver a firmar.
+  </p>
+
+  <div class="field-group">
+    <label>Firma del Deudor</label>
+    <div class="firma-area" id="area-deudor">
+      <canvas id="canvas-deudor"></canvas>
+      <span class="firma-hint" id="hint-deudor">✦ Dibuja aquí tu firma</span>
+    </div>
+    <button class="btn-borrar-firma" onclick="borrarFirma('canvas-deudor','hint-deudor')">× Borrar y volver a firmar</button>
+  </div>
+  <div class="field-group">
+    <label>Nombre del deudor (bajo firma)</label>
+    <input type="text" id="fn_deudor" placeholder="Nombre completo" />
+  </div>
+  <div class="field-group" style="margin-top:8px;">
+    <label>Firma del Acreedor / Testigo</label>
+    <div class="firma-area" id="area-acreedor">
+      <canvas id="canvas-acreedor"></canvas>
+      <!--<img 
+        src="AQUI_TU_BASE64" 
+      style="width:100%; max-height:150px; object-fit:contain;"
+      >-->
+      <span class="firma-hint" id="hint-acreedor">✦ Dibuja aquí tu firma</span>
+    </div>
+    <button class="btn-borrar-firma" onclick="borrarFirma('canvas-acreedor','hint-acreedor')">× Borrar y volver a firmar</button>
+  </div>
+  <div class="field-group">
+    <label>Nombre del acreedor (bajo firma)</label>
+    <input type="text" id="fn_acreedor" placeholder="Nombre completo" />
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 7: VISTA PREVIA ══ -->
+<div class="section" id="sec-6">
+  <div class="section-header">
+    <div class="step-num">Paso 7 de 7</div>
+    <h2>Vista Previa y Descarga</h2>
+  </div>
+
+  <!-- Documento renderizado -->
+  <div id="preview-section">
+  <div class="doc-preview" id="doc-final">
+    <span class="corner-d tl">❧</span>
+    <span class="corner-d tr">❧</span>
+    <span class="corner-d bl">❧</span>
+    <span class="corner-d br">❧</span>
+
+    <div class="doc-top">
+      <div class="serial-row">
+        <span>N.° Pagaré: <span id="p_serial">—</span></span>
+        <span>Valor: <span id="p_monto_badge">—</span></span>
+      </div>
+      <h2>PAGARÉ</h2>
+      <div class="subtit">Título Valor · C. Co. Art. 709 y ss.</div>
+    </div>
+
+    <div class="doc-body">
+      <p>
+        Yo, <span class="val" id="p_nombre_deudor">—</span>,
+        identificado(a) con <span class="val" id="p_tipo_doc">C.C.</span>
+        N.° <span class="val" id="p_num_doc">—</span>,
+        domiciliado(a) en <span class="val" id="p_ciudad_deudor">—</span>,
+        me obligo a pagar <em>incondicionalmente</em> y a la orden de
+        <span class="val" id="p_acreedor">—</span>,
+        la suma de:
+      </p>
+      <p>
+        <strong><span class="val" id="p_monto_letras">—</span></strong>
+        (<span class="val" id="p_monto_num">—</span>),
+        pagaderos en <span class="val" id="p_ciudad_pago">—</span>,
+        el día <span class="val" id="p_dia_vcto">—</span>
+        de <span class="val" id="p_mes_vcto">—</span>
+        de <span class="val" id="p_anio_vcto">—</span>.
+      </p>
+      <p>
+        En caso de mora, el saldo insoluto devengará intereses a la tasa de
+        <span class="val" id="p_tasa">—</span> % mensual sobre saldos,
+        correspondiente a la tasa máxima legal permitida por la Superintendencia Financiera de Colombia,
+        sin requerimiento judicial previo.
+      </p>
+    </div>
+
+    <div class="doc-clausulas">
+      <p><em>Cláusula de aceleración —</em> El incumplimiento de cualquier pago hará exigible la totalidad de la obligación de manera inmediata, junto con los intereses de mora causados.</p>
+      <p><em>Mérito ejecutivo —</em> El presente pagaré presta mérito ejecutivo conforme al artículo 488 del C.P.C. y la Ley 1564 de 2012. El suscriptor renuncia expresamente al requerimiento previo para quedar constituido en mora.</p>
+      <p><em>Codeudor / Avalista —</em> <span id="p_nombre_codeudor" class="val empty">—</span>, identificado(a) con <span id="p_tipo_doc_co" class="val">C.C.</span> N.° <span id="p_num_doc_co" class="val empty">—</span>, domiciliado(a) en <span id="p_ciudad_codeudor" class="val empty">—</span>, actúa como codeudor solidario y renuncia al beneficio de excusión, respondiendo con todos sus bienes presentes y futuros hasta la total cancelación de la obligación.</p>
+      <p><em>Domicilio —</em> Se fija como domicilio contractual la ciudad de <span class="val" id="p_ciudad_contrato">—</span>, departamento de <span class="val" id="p_dpto">—</span>, Colombia.</p>
+    </div>
+
+    <div class="doc-firmas" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="doc-firma-bloque">
+        <div class="doc-firma-linea">
+          <img class="doc-firma-img" id="p_firma_deudor" src="" alt="" />
+        </div>
+        <div class="doc-firma-lbl">Firma del Deudor</div>
+        <div class="doc-firma-nombre" id="p_fn_deudor">—</div>
+        <div style="font-size:0.7rem;color:var(--brown);opacity:.65;">
+          <span id="p_tipo_doc2"></span> <span id="p_num_doc2">—</span>
+        </div>
+      </div>
+      <div class="doc-firma-bloque">
+        <div class="doc-firma-linea">
+          <img class="doc-firma-img" id="p_firma_codeudor" src="" alt="" />
+        </div>
+        <div class="doc-firma-lbl">Firma del Codeudor</div>
+        <div class="doc-firma-nombre" id="p_fn_codeudor">—</div>
+        <div style="font-size:0.7rem;color:var(--brown);opacity:.65;">
+          <span id="p_tipo_doc_co2"></span> <span id="p_num_doc_co2">—</span>
+        </div>
+      </div>
+      <div class="doc-firma-bloque">
+        <div class="doc-firma-linea">
+          <img class="doc-firma-img" id="p_firma_acreedor" src="" alt="" />
+        </div>
+        <div class="doc-firma-lbl">Firma del Acreedor</div>
+        <div class="doc-firma-nombre" id="p_fn_acreedor">—</div>
+      </div>
+    </div>
+
+    <div class="doc-pie">
+      <span>Suscrito en <span id="p_ciudad_firma">—</span>, el <span id="p_dia_firma">—</span> de <span id="p_mes_firma">—</span> de <span id="p_anio_firma">—</span>.</span>
+      <span>Doc. N.° <span id="p_serial2">—</span></span>
+    </div>
+  </div>
+  </div><!-- /preview-section -->
+</div>
+</div><!-- /sections -->
+
+<!-- NAV BUTTONS -->
+<div class="nav-btns">
+  <button class="btn btn-prev" id="btnPrev" onclick="goStep(-1)" style="display:none;">← Atrás</button>
+  <button class="btn btn-next" id="btnNext" onclick="goStep(1)">Siguiente →</button>
+  <button class="btn btn-pdf" id="btnPDF" onclick="descargarPDF()" style="display:none;">⬇ Descargar PDF</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══ WIZARD ══ */
+const TOTAL = 7;
+let current = 0;
+
+function renderDots(){
+  const c = document.getElementById('stepDots');
+  c.innerHTML = '';
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===current?' active':i<current?' done':'');
+    c.appendChild(d);
+  }
+}
+
+function updateProgress(){
+  document.getElementById('progressBar').style.width = ((current+1)/TOTAL*100)+'%';
+}
+
+function goStep(dir){
+  const next = current + dir;
+  if(next < 0 || next >= TOTAL) return;
+  document.getElementById('sec-'+current).classList.remove('active');
+  current = next;
+  document.getElementById('sec-'+current).classList.add('active');
+  renderDots();
+  updateProgress();
+  // Botones
+  document.getElementById('btnPrev').style.display = current>0?'':'none';
+  document.getElementById('btnNext').style.display = current<TOTAL-1?'':'none';
+  document.getElementById('btnPDF').style.display  = current===TOTAL-1?'':'none';
+  // Si llegamos al preview, construirlo
+  if(current===TOTAL-1) buildPreview();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderDots();
+updateProgress();
+
+/* ══ MONTO SYNC ══ */
+function syncMonto(){
+  const v = document.getElementById('monto_num').value;
+  document.getElementById('monto_preview').textContent = v ? '$'+v : '$0';
+}
+
+/* ══ CANVAS FIRMAS ══ */
+function setupCanvas(id, hintId){
+  const canvas = document.getElementById(id);
+  const area   = canvas.parentElement;
+  function setSize(){
+    const r = area.getBoundingClientRect();
+    canvas.width  = r.width  * window.devicePixelRatio || 320;
+    canvas.height = 120 * window.devicePixelRatio || 120;
+    canvas.style.width  = '100%';
+    canvas.style.height = '120px';
+  }
+  setSize();
+  window.addEventListener('resize', setSize);
+
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  const hint = document.getElementById(hintId);
+
+  function scale(e){
+    const r = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return {
+      x:(src.clientX-r.left)*(canvas.width/r.width),
+      y:(src.clientY-r.top)*(canvas.height/r.height)
+    };
+  }
+
+  ctx.strokeStyle='#1a120a';
+  ctx.lineWidth=2*window.devicePixelRatio;
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+
+  function start(e){ drawing=true; hint.classList.add('hidden'); const p=scale(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); }
+  function move(e){ if(!drawing) return; const p=scale(e); ctx.lineTo(p.x,p.y); ctx.stroke(); }
+  function stop(){ drawing=false; }
+
+  canvas.addEventListener('mousedown',  start);
+  canvas.addEventListener('mousemove',  move);
+  canvas.addEventListener('mouseup',    stop);
+  canvas.addEventListener('mouseleave', stop);
+  canvas.addEventListener('touchstart', e=>{e.preventDefault();start(e);},{passive:false});
+  canvas.addEventListener('touchmove',  e=>{e.preventDefault();move(e);},{passive:false});
+  canvas.addEventListener('touchend',   stop);
+}
+
+function borrarFirma(canvasId, hintId){
+  const c = document.getElementById(canvasId);
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+  document.getElementById(hintId).classList.remove('hidden');
+}
+
+setupCanvas('canvas-deudor','hint-deudor');
+setupCanvas('canvas-acreedor','hint-acreedor');
+setupCanvas('canvas-codeudor','hint-codeudor');
+
+/* ══ BUILD PREVIEW ══ */
+function v(id){ return document.getElementById(id)?.value || ''; }
+function set(id, txt, fallback){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const val = txt || fallback || '—';
+  el.textContent = val;
+  el.className = txt ? 'val' : 'val empty';
+}
+
+function buildPreview(){
+  set('p_serial',    v('serial'));
+  set('p_monto_badge', v('monto_num') ? '$'+v('monto_num') : '');
+  set('p_nombre_deudor', v('nombre_deudor'));
+  set('p_tipo_doc',  v('tipo_doc') || 'C.C.');
+  set('p_num_doc',   v('num_doc'));
+  set('p_ciudad_deudor', v('ciudad_deudor'));
+  set('p_acreedor',  v('acreedor'));
+  set('p_monto_letras', v('monto_letras'));
+  set('p_monto_num', v('monto_num') ? '$'+v('monto_num')+' m/cte' : '');
+  set('p_ciudad_pago', v('ciudad_pago'));
+  set('p_dia_vcto',  v('dia_vcto'));
+  set('p_mes_vcto',  v('mes_vcto'));
+  set('p_anio_vcto', v('anio_vcto'));
+  set('p_tasa',      v('tasa'));
+  set('p_ciudad_contrato', v('ciudad_contrato'));
+  set('p_dpto',      v('dpto'));
+  set('p_ciudad_firma', v('ciudad_firma'));
+  set('p_dia_firma', v('dia_firma'));
+  set('p_mes_firma', v('mes_firma'));
+  set('p_anio_firma',v('anio_firma'));
+  set('p_serial2',   v('serial'));
+  set('p_fn_deudor', v('fn_deudor'));
+  set('p_fn_acreedor', v('fn_acreedor'));
+
+  // Codeudor
+  set('p_nombre_codeudor', v('nombre_codeudor'));
+  set('p_num_doc_co',   v('num_doc_co'));
+  set('p_ciudad_codeudor', v('ciudad_codeudor'));
+  set('p_fn_codeudor',  v('fn_codeudor'));
+  set('p_num_doc_co2',  v('num_doc_co'));
+  const tco = document.getElementById('p_tipo_doc_co');
+  if(tco) tco.textContent = v('tipo_doc_co') || 'C.C.';
+  const tco2 = document.getElementById('p_tipo_doc_co2');
+  if(tco2) tco2.textContent = v('tipo_doc_co') || 'C.C.';
+
+  // Tipo doc deudor
+  const td = document.getElementById('p_tipo_doc2');
+  if(td) td.textContent = v('tipo_doc') || 'C.C.';
+  set('p_num_doc2', v('num_doc'));
+
+  // Firmas
+  const cd = document.getElementById('canvas-deudor');
+  const ca = document.getElementById('canvas-acreedor');
+  const cc = document.getElementById('canvas-codeudor');
+  const imgD = document.getElementById('p_firma_deudor');
+  const imgA = document.getElementById('p_firma_acreedor');
+  const imgC = document.getElementById('p_firma_codeudor');
+  imgD.src = cd.toDataURL('image/png');
+  imgA.src = ca.toDataURL('image/png');
+  imgC.src = cc.toDataURL('image/png');
+}
+
+/* ══ TOAST ══ */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+/* ══ DESCARGAR PDF — ventana estática autocontenida ══ */
+function descargarPDF(){
+  buildPreview();
+
+  // Recoger todos los valores
+  const gv = id => {
+    const el = document.getElementById(id);
+    if(!el) return '';
+    return (el.value !== undefined ? el.value : el.textContent).trim();
+  };
+
+  const nombreDeudor   = gv('nombre_deudor')   || '—';
+  const tipoDoc        = gv('tipo_doc')         || 'C.C.';
+  const numDoc         = gv('num_doc')          || '—';
+  const ciudadDeudor   = gv('ciudad_deudor')    || '—';
+  const acreedor       = gv('acreedor')         || 'CREDICOOP';
+  const tipoDocAc      = document.getElementById('tipo_doc_ac')?.textContent?.trim() || 'NIT';
+  const numDocAc       = gv('num_doc_ac')       || '901.456.782-5';
+  const serial         = document.getElementById('serial')?.textContent?.trim() || gv('serial') || '00001';
+  const montoNum       = gv('monto_num')        || '—';
+  const montoLetras    = gv('monto_letras')      || '—';
+  const tasa           = gv('tasa')             || '—';
+  const diaVcto        = gv('dia_vcto')         || '—';
+  const mesVcto        = gv('mes_vcto')         || '—';
+  const anioVcto       = gv('anio_vcto')        || '—';
+  const ciudadPago     = gv('ciudad_pago')      || '—';
+  const ciudadContrato = gv('ciudad_contrato')  || '—';
+  const dpto           = gv('dpto')             || '—';
+  const diaFirma       = gv('dia_firma')        || '—';
+  const mesFirma       = gv('mes_firma')        || '—';
+  const anioFirma      = gv('anio_firma')       || '—';
+  const ciudadFirma    = gv('ciudad_firma')     || '—';
+  const fnDeudor       = gv('fn_deudor')        || nombreDeudor;
+  const fnAcreedor     = gv('fn_acreedor')      || '—';
+  const nombreCo       = gv('nombre_codeudor')  || '';
+  const tipoDocCo      = gv('tipo_doc_co')      || 'C.C.';
+  const numDocCo       = gv('num_doc_co')       || '';
+  const ciudadCo       = gv('ciudad_codeudor')  || '';
+  const fnCo           = gv('fn_codeudor')      || '';
+
+  // Firmas como base64
+  const firmaD = document.getElementById('canvas-deudor').toDataURL('image/png');
+  const firmaA = document.getElementById('canvas-acreedor').toDataURL('image/png');
+  const firmaCo = document.getElementById('canvas-codeudor').toDataURL('image/png');
+
+  // Nombre del archivo: "Pagare_NombreDeudor"
+  const nombreArchivo = 'Pagare_' + nombreDeudor.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g,'').trim().replace(/\s+/g,'_');
+
+  // ─ Cláusula y bloque firma codeudor (solo si hay nombre) ─
+  const clausulaCo = nombreCo ? `
+    <p><b>Codeudor / Avalista —</b> ${nombreCo}, identificado(a) con ${tipoDocCo} N.° ${numDocCo || '—'}, domiciliado(a) en ${ciudadCo || '—'}, actúa como codeudor solidario y renuncia al beneficio de excusión, respondiendo con todos sus bienes presentes y futuros hasta la total cancelación de la obligación.</p>` : '';
+
+  const colsFirma = nombreCo ? '1fr 1fr 1fr' : '1fr 1fr';
+  const bloqueFireCo = nombreCo ? `
+    <div style="text-align:center;">
+      <div style="height:56px;position:relative;border-bottom:1px solid #1a120a;margin-bottom:5px;">
+        <img src="${firmaCo}" style="position:absolute;bottom:2px;left:0;right:0;height:52px;width:100%;object-fit:contain;" />
+      </div>
+      <div style="font-size:7pt;letter-spacing:1.5px;text-transform:uppercase;color:#5c3a1a;opacity:.7;">Firma del Codeudor</div>
+      <div style="font-size:9pt;margin-top:3px;color:#1a120a;">${fnCo || '—'}</div>
+      <div style="font-size:7pt;color:#5c3a1a;opacity:.65;">${tipoDocCo} ${numDocCo || '—'}</div>
+    </div>` : '';
+
+  // ─ HTML del documento estático ─
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>${nombreArchivo}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:210mm;margin:0 auto;background:#f6f1e7;}
+body{
+  font-family:'Crimson Pro',Georgia,serif;
+  font-size:10.5pt;
+  color:#1a120a;
+  padding:14mm 15mm 12mm;
+  line-height:1.8;
+}
+.doc{
+  background:#f6f1e7;
+  border:1.5px solid #c9a96e;
+  padding:24px 28px 20px;
+  position:relative;
+}
+.corner{position:absolute;color:#b8860b;font-size:13pt;opacity:.35;pointer-events:none;}
+.corner.tl{top:8px;left:12px;}
+.corner.tr{top:8px;right:12px;transform:scaleX(-1);}
+.corner.bl{bottom:8px;left:12px;transform:scaleY(-1);}
+.corner.br{bottom:8px;right:12px;transform:scale(-1);}
+/* cabecera */
+.top{text-align:center;border-bottom:1px solid #c9a96e;padding-bottom:12px;margin-bottom:16px;}
+.serial-row{display:flex;justify-content:space-between;font-size:7.5pt;color:#5c3a1a;opacity:.7;margin-bottom:8px;}
+h1{font-family:'IM Fell English',Georgia,serif;font-size:24pt;color:#5c3a1a;letter-spacing:2px;line-height:1;}
+.subtit{font-size:6.5pt;letter-spacing:3px;text-transform:uppercase;color:#b8860b;margin-top:4px;}
+/* cuerpo */
+.cuerpo{text-align:justify;hyphens:auto;}
+.cuerpo p{margin-bottom:10px;}
+.val{color:#8b1a1a;font-style:italic;border-bottom:1px solid rgba(92,58,26,.4);padding:0 2px;}
+/* clausulas */
+.cl{margin-top:12px;padding-top:10px;border-top:1px solid #c9a96e;font-size:8.5pt;line-height:1.65;color:#3a2a12;}
+.cl p{margin-bottom:6px;}
+.cl b{font-size:7pt;letter-spacing:1px;text-transform:uppercase;color:#5c3a1a;}
+/* firmas */
+.firmas{display:grid;grid-template-columns:${colsFirma};gap:18px;margin-top:26px;}
+.firma-bloque{text-align:center;}
+.firma-espacio{height:56px;position:relative;border-bottom:1px solid #1a120a;margin-bottom:5px;}
+.firma-espacio img{position:absolute;bottom:2px;left:0;right:0;height:52px;width:100%;object-fit:contain;}
+.firma-lbl{font-size:7pt;letter-spacing:1.5px;text-transform:uppercase;color:#5c3a1a;opacity:.7;}
+.firma-nombre{font-size:9pt;margin-top:3px;color:#1a120a;}
+.firma-doc{font-size:7pt;color:#5c3a1a;opacity:.65;}
+/* pie */
+.pie{margin-top:14px;border-top:1px solid #c9a96e;padding-top:8px;display:flex;justify-content:space-between;font-size:7pt;color:#5c3a1a;opacity:.7;flex-wrap:wrap;gap:4px;}
+/* botón imprimir — solo en pantalla */
+.print-btn{display:block;margin:16px auto 0;padding:10px 28px;background:#8b2020;color:#f6f1e7;border:none;border-radius:3px;font-family:'Crimson Pro',serif;font-size:11pt;letter-spacing:1px;cursor:pointer;}
+@media print{
+  html,body{width:100%;padding:8mm 10mm;}
+  .print-btn{display:none!important;}
+  .doc{border:1px solid #c9a96e;}
+}
+</style>
+</head>
+<body>
+<div class="doc">
+  <span class="corner tl">❧</span>
+  <span class="corner tr">❧</span>
+  <span class="corner bl">❧</span>
+  <span class="corner br">❧</span>
+
+  <div class="top">
+    <div class="serial-row">
+      <span>N.° Pagaré: <b>${serial}</b></span>
+      <span>Valor: <b>$${montoNum} m/cte</b></span>
+    </div>
+    <h1>PAGARÉ</h1>
+    <div class="subtit">Título Valor · C. Co. Art. 709 y ss.</div>
+  </div>
+
+  <div class="cuerpo">
+    <p>
+      Yo, <span class="val">${nombreDeudor}</span>,
+      identificado(a) con <span class="val">${tipoDoc}</span>
+      N.° <span class="val">${numDoc}</span>,
+      domiciliado(a) en <span class="val">${ciudadDeudor}</span>,
+      me obligo a pagar <em>incondicionalmente</em> y a la orden de
+      <span class="val">${acreedor}</span>
+      (${tipoDocAc} ${numDocAc}),
+      la suma de:
+    </p>
+    <p>
+      <b><span class="val">${montoLetras}</span></b>
+      (<span class="val">$${montoNum} m/cte</span>),
+      pagaderos en la ciudad de <span class="val">${ciudadPago}</span>,
+      el día <span class="val">${diaVcto}</span>
+      de <span class="val">${mesVcto}</span>
+      de <span class="val">${anioVcto}</span>.
+    </p>
+    <p>
+      En caso de mora, el saldo insoluto devengará intereses a la tasa de
+      <span class="val">${tasa}</span> % mensual sobre saldos,
+      equivalente a la tasa máxima legal permitida por la Superintendencia Financiera de Colombia,
+      sin necesidad de requerimiento judicial previo.
+    </p>
+  </div>
+
+  <div class="cl">
+    <p><b>Cláusula de aceleración —</b> El incumplimiento de cualquier pago hará exigible la totalidad de la obligación de manera inmediata, junto con los intereses de mora causados hasta la fecha de pago total.</p>
+    <p><b>Mérito ejecutivo —</b> El presente pagaré presta mérito ejecutivo conforme al artículo 488 del C.P.C. y concordantes de la Ley 1564 de 2012. El suscriptor renuncia expresamente al requerimiento previo para quedar constituido en mora.</p>
+    ${clausulaCo}
+    <p><b>Domicilio —</b> Las partes fijan como domicilio contractual la ciudad de <span class="val">${ciudadContrato}</span>, departamento de <span class="val">${dpto}</span>, Colombia.</p>
+  </div>
+
+  <div class="firmas">
+    <div class="firma-bloque">
+      <div class="firma-espacio"><img src="${firmaD}" /></div>
+      <div class="firma-lbl">Firma del Deudor</div>
+      <div class="firma-nombre">${fnDeudor}</div>
+      <div class="firma-doc">${tipoDoc} ${numDoc}</div>
+    </div>
+    ${bloqueFireCo}
+    <div class="firma-bloque">
+      <div class="firma-espacio"><img src="${firmaA}" /></div>
+      <div class="firma-lbl">Firma del Acreedor</div>
+      <div class="firma-nombre">${fnAcreedor}</div>
+      <div class="firma-doc">${acreedor}</div>
+    </div>
+  </div>
+
+  <div class="pie">
+    <span>Suscrito en ${ciudadFirma}, el ${diaFirma} de ${mesFirma} de ${anioFirma}.</span>
+    <span>Doc. N.° ${serial}</span>
+  </div>
+</div>
+
+<button class="print-btn" onclick="window.print()">⬇ Guardar como PDF</button>
+
+<script>
+  // Esperar a que las fuentes carguen y luego imprimir
+  document.fonts.ready.then(function(){
+    setTimeout(function(){ window.print(); }, 600);
+  });
+  // Sugerir nombre de archivo via título
+  document.title = '${nombreArchivo}';
+<\/script>
+</body>
+</html>`;
+
+  // Abrir en nueva ventana
+  const win = window.open('', '_blank', 'width=900,height=750');
+  if(!win){
+    showToast('⚠ Permite las ventanas emergentes para descargar el PDF');
+    return;
+  }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  showToast('✓ Abre el diálogo → "Guardar como PDF" · Archivo: ' + nombreArchivo);
+}
+</script>
+</body>
+</html>
