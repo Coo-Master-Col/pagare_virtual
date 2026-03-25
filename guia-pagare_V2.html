@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía · Cómo llenar tu Pagaré</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#faf8f4;
+  --white:#ffffff;
+  --ink:#1c1410;
+  --brown:#6b3f1a;
+  --gold:#c9941a;
+  --gold-light:#e8b84b;
+  --gold-pale:#fdf3dc;
+  --red:#8b2020;
+  --border:#e0d0b0;
+  --muted:#8a7560;
+  --step1:#d4691e;
+  --step2:#2e7d4f;
+  --step3:#1a5c8b;
+  --step4:#7b3fa0;
+  --step5:#c9941a;
+  --step6:#8b2020;
+  --step7:#2e6b6b;
+}
+html{font-size:16px;scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Source Serif 4',Georgia,serif;
+  min-height:100vh;
+}
+
+/* ── HERO ── */
+.hero{
+  background:var(--ink);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(201,148,26,0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,32,32,0.12) 0%, transparent 50%);
+  color:#f5ede0;
+  padding:48px 24px 40px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:repeating-linear-gradient(
+    0deg, transparent, transparent 39px,
+    rgba(201,148,26,0.06) 39px, rgba(201,148,26,0.06) 40px
+  );
+}
+.hero-badge{
+  display:inline-block;
+  border:1px solid rgba(201,148,26,0.4);
+  color:var(--gold-light);
+  font-size:0.6rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  padding:5px 14px;
+  border-radius:20px;
+  margin-bottom:18px;
+  position:relative;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,6vw,2.8rem);
+  font-weight:900;
+  line-height:1.15;
+  margin-bottom:12px;
+  position:relative;
+}
+.hero h1 em{
+  color:var(--gold-light);
+  font-style:normal;
+}
+.hero p{
+  font-size:clamp(0.9rem,3vw,1.05rem);
+  color:rgba(245,237,224,0.7);
+  max-width:480px;
+  margin:0 auto;
+  line-height:1.65;
+  position:relative;
+}
+.hero-divider{
+  width:48px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:20px auto 0;
+}
+
+/* ── INTRO ── */
+.intro{
+  max-width:640px;
+  margin:0 auto;
+  padding:36px 24px 0;
+  text-align:center;
+}
+.intro p{
+  font-size:1rem;
+  line-height:1.75;
+  color:var(--brown);
+}
+.intro strong{color:var(--ink);}
+
+/* ── STEPS ── */
+.steps{
+  max-width:640px;
+  margin:0 auto;
+  padding:32px 16px 48px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.step-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(28,20,16,0.06);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.step-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 24px rgba(28,20,16,0.10);
+}
+
+.step-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--border);
+}
+
+.step-num-badge{
+  width:38px;height:38px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  font-weight:700;
+  color:white;
+  flex-shrink:0;
+}
+
+.step-title-wrap{}
+.step-label{
+  font-size:0.58rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  opacity:0.55;
+  color:var(--muted);
+  display:block;
+}
+.step-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.2;
+}
+
+.step-body{
+  padding:16px 20px 18px;
+}
+.step-body p{
+  font-size:0.92rem;
+  line-height:1.7;
+  color:#3d2e1e;
+  margin-bottom:10px;
+}
+.step-body p:last-child{margin-bottom:0;}
+
+/* Campos dentro de cada paso */
+.campos{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:10px;
+}
+.campo{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  background:var(--gold-pale);
+  border:1px solid rgba(201,148,26,0.2);
+  border-radius:8px;
+  padding:10px 12px;
+}
+.campo-icon{
+  font-size:1.1rem;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.campo-text{}
+.campo-name{
+  font-size:0.78rem;
+  font-weight:600;
+  color:var(--brown);
+  letter-spacing:0.04em;
+  display:block;
+}
+.campo-desc{
+  font-size:0.8rem;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:1px;
+}
+
+/* Tip / alerta */
+.tip{
+  display:flex;
+  gap:10px;
+  background:#fff8e8;
+  border-left:3px solid var(--gold);
+  border-radius:0 8px 8px 0;
+  padding:10px 14px;
+  margin-top:12px;
+  font-size:0.82rem;
+  color:#5a3e10;
+  line-height:1.55;
+}
+.tip-icon{flex-shrink:0;font-size:1rem;}
+
+.opcional{
+  display:flex;
+  gap:10px;
+  background:#f0f7ff;
+  border-left:3px solid #6aabde;
+  border-radius:0 8px 8px 0;
+  padding:10px 14px;
+  margin-top:12px;
+  font-size:0.82rem;
+  color:#1a3a5c;
+  line-height:1.55;
+}
+
+/* Colores por paso */
+.s1 .step-num-badge{background:var(--step1);}
+.s1 .step-header{border-bottom-color:rgba(212,105,30,0.15);}
+.s2 .step-num-badge{background:var(--step2);}
+.s3 .step-num-badge{background:var(--step3);}
+.s4 .step-num-badge{background:var(--step4);}
+.s5 .step-num-badge{background:var(--step5);}
+.s6 .step-num-badge{background:var(--step6);}
+.s7 .step-num-badge{background:var(--step7);}
+
+.NoModificar{
+  color: var(--red);
+}
+
+/* ── SECCIÓN FIRMA ── */
+.firma-guide{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(28,20,16,0.06);
+}
+.firma-demo{
+  background:var(--ink);
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(245,237,224,0.3);
+  font-size:0.75rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  position:relative;
+  overflow:hidden;
+}
+.firma-demo svg{
+  position:absolute;
+  opacity:0.18;
+}
+
+/* ── NOTA LEGAL ── */
+.nota-legal{
+  max-width:640px;
+  margin:0 auto;
+  padding:0 16px 20px;
+}
+.nota-legal-box{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px 18px;
+  display:flex;
+  gap:12px;
+  font-size:0.8rem;
+  color:var(--muted);
+  line-height:1.6;
+}
+.nota-legal-box .icon{font-size:1.2rem;flex-shrink:0;}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;
+  padding:24px 16px 32px;
+  font-size:0.72rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-top:1px solid var(--border);
+  margin-top:8px;
+}
+footer strong{color:var(--brown);}
+
+/* ── PRINT ── */
+@media print{
+  .hero{background:#1c1410 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .step-card{break-inside:avoid;}
+  .step-num-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .hero{padding:36px 16px 32px;}
+  .step-header{padding:14px 16px 12px;}
+  .step-body{padding:12px 16px 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Guía de usuario · Pagaré Virtual</div>
+  <h1>¿Cómo llenar<br>tu <em>Pagaré</em>?</h1>
+  <p>Sigue estos 7 pasos sencillos para completar y firmar el documento correctamente.</p>
+  <div class="hero-divider"></div>
+</div>
+
+<!-- INTRO -->
+<div class="intro">
+  <p>Ingresa a la <strong>URL</strong> del Pagaré. Ábrelo en <strong>Chrome o Edge</strong> desde tu celular o computador. El pagaré se llena paso a paso — solo toca <em>"Siguiente"</em> para avanzar.</p>
+</div>
+
+<!-- PASOS -->
+<div class="steps">
+
+  <!-- PASO 1 -->
+  <div class="step-card s1">
+    <div class="step-header">
+      <div class="step-num-badge">1</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 1 de 7</span>
+        <div class="step-title">Datos del Deudor</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Ingresa la información de la persona que queda obligada a pagar.</p>
+      <div class="campos">
+        <div class="campo">
+          <span class="campo-icon">👤</span>
+          <div class="campo-text">
+            <span class="campo-name">Nombre completo</span>
+            <span class="campo-desc">Nombre y apellidos tal como aparecen en el documento de identidad.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">🪪</span>
+          <div class="campo-text">
+            <span class="campo-name">Tipo y N.° de documento</span>
+            <span class="campo-desc">Selecciona C.C., NIT, C.E. o Pasaporte, y escribe el número sin puntos ni espacios.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">📍</span>
+          <div class="campo-text">
+            <span class="campo-name">Ciudad de residencia</span>
+            <span class="campo-desc">Ciudad donde vive o tiene domicilio el deudor.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="step-card s2">
+    <div class="step-header">
+      <div class="step-num-badge">2</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 2 de 7</span>
+        <div class="step-title">Acreedor / Beneficiario</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Datos de quien recibirá el pago (puede ser una persona o empresa). <span class="NoModificar"><b>NO MODIFICAR.</b></span></p>
+      <div class="campos">
+        <div class="campo">
+          <span class="campo-icon">👤</span>
+          <div class="campo-text">
+            <span class="campo-name">Nombre completo del acreedor</span>
+            <span class="campo-desc">Persona o empresa a quien se le debe el dinero.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">🪪</span>
+          <div class="campo-text">
+            <span class="campo-name">Tipo y N.° de documento</span>
+            <span class="campo-desc">Si es empresa, selecciona NIT y escribe el número con dígito de verificación.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">🔢</span>
+          <div class="campo-text">
+            <span class="campo-name">N.° de Pagaré</span>
+            <span class="campo-desc">Número de control del documento (ej: 00001). Opcional si no llevas numeración.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="step-card s3">
+    <div class="step-header">
+      <div class="step-num-badge">3</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 3 de 7</span>
+        <div class="step-title">Monto y Vencimiento</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Esta sección define cuánto se debe y cuándo se paga. <span class="NoModificar"><b>NO MODIFICAR.</b></span></p>
+    </div>
+  </div>
+
+  <!-- PASO 4 -->
+  <div class="step-card s4">
+    <div class="step-header">
+      <div class="step-num-badge">4</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 4 de 7</span>
+        <div class="step-title">Ciudad y Cláusulas</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Define dónde se acuerda el pago y dónde se firma el documento.</p>
+      <div class="campos">
+        <div class="campo">
+          <span class="campo-icon">🏙️</span>
+          <div class="campo-text">
+            <span class="campo-name">Ciudad de pago</span>
+            <span class="campo-desc">Ciudad donde el deudor realizará el pago. Generalmente donde vive el acreedor.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">⚖️</span>
+          <div class="campo-text">
+            <span class="campo-name">Ciudad contractual</span>
+            <span class="campo-desc">Ciudad que rige legalmente el contrato (puede ser la misma que la anterior).</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">🗺️</span>
+          <div class="campo-text">
+            <span class="campo-name">Departamento</span>
+            <span class="campo-desc">Departamento al que pertenece la ciudad contractual. Ej: Antioquia, Cundinamarca.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">📅</span>
+          <div class="campo-text">
+            <span class="campo-name">Fecha y ciudad de firma</span>
+            <span class="campo-desc">Día, mes, año y ciudad donde se está firmando el pagaré hoy.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 5 -->
+  <div class="step-card s5">
+    <div class="step-header">
+      <div class="step-num-badge">5</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 5 de 7</span>
+        <div class="step-title">Codeudor / Avalista</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>El codeudor es una persona adicional que respalda la deuda. Si no te solicitaron codeudor, <strong>deja este paso en blanco</strong> y toca "Siguiente".</p>
+      <div class="campos">
+        <div class="campo">
+          <span class="campo-icon">🤝</span>
+          <div class="campo-text">
+            <span class="campo-name">Nombre y documento del codeudor</span>
+            <span class="campo-desc">Sus datos completos. El codeudor responde solidariamente con todos sus bienes.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">✍️</span>
+          <div class="campo-text">
+            <span class="campo-name">Firma del codeudor</span>
+            <span class="campo-desc">Dibuja la firma con el dedo en el recuadro. Si cometes un error, toca "Borrar y volver a firmar".</span>
+          </div>
+        </div>
+      </div>
+      <div class="opcional">
+        <span class="tip-icon">ℹ️</span>
+        <span>Este paso no es necesario. Si no solicitaron codeudor, simplemente toca "Siguiente" sin llenar nada.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 6 -->
+  <div class="step-card s6">
+    <div class="step-header">
+      <div class="step-num-badge">6</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 6 de 7</span>
+        <div class="step-title">Firmas Digitales</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Cada parte firma directamente en la pantalla con el dedo.</p>
+      <div class="campos">
+        <div class="campo">
+          <span class="campo-icon">✍️</span>
+          <div class="campo-text">
+            <span class="campo-name">Cómo firmar</span>
+            <span class="campo-desc">Toca el recuadro oscuro y desliza el dedo para trazar tu firma. Si no queda bien, toca "Borrar y volver a firmar".</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">👥</span>
+          <div class="campo-text">
+            <span class="campo-name">¿Quién firma?</span>
+            <span class="campo-desc">El <strong>deudor</strong> firma primero, luego el <strong>acreedor o testigo (queda en blanco)</strong>. Escribe el nombre completo bajo cada firma.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <span>Si estás en celular, apoya bien la muñeca en la pantalla y firma despacio para mayor precisión.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 7 -->
+  <div class="step-card s7">
+    <div class="step-header">
+      <div class="step-num-badge">7</div>
+      <div class="step-title-wrap">
+        <span class="step-label">Paso 7 de 7</span>
+        <div class="step-title">Vista Previa y Descarga</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Revisa que toda la información sea correcta antes de descargar.</p>
+      <div class="campos">
+        <div class="campo">
+          <span class="campo-icon">🔍</span>
+          <div class="campo-text">
+            <span class="campo-name">Revisa el documento</span>
+            <span class="campo-desc">Los campos en <em>cursiva roja</em> son los datos que ingresaste. Verifica que sean correctos.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">⬇️</span>
+          <div class="campo-text">
+            <span class="campo-name">Botón "Descargar PDF"</span>
+            <span class="campo-desc">Toca el botón rojo para guardar el pagaré como PDF en tu dispositivo. El archivo se descarga automáticamente.</span>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="campo-icon">📤</span>
+          <div class="campo-text">
+            <span class="campo-name">Comparte el PDF</span>
+            <span class="campo-desc">Una vez descargado, puedes enviarlo por WhatsApp, correo.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">⚠️</span>
+        <span>Si necesitas corregir algo, toca "← Atrás" para volver a los pasos anteriores y editar.</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /steps -->
+
+<!-- NOTA LEGAL -->
+<div class="nota-legal">
+  <div class="nota-legal-box">
+    <span class="icon">⚖️</span>
+    <span>Este pagaré es un título valor con mérito ejecutivo según la ley colombiana (C. Co. Art. 709 y Ley 1564 de 2012). Para cobro judicial o dudas legales.</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Pagaré Virtual · Colombia</strong> &nbsp;·&nbsp; Documento financiero de uso privado
+</footer>
+
+</body>
+</html>
